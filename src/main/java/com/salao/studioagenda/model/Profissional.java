@@ -11,15 +11,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-
 @Entity
-@Table(name = "servico")
+@Table(name = "profissional")
 @Getter
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Servico {
+public class Profissional {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +26,6 @@ public class Servico {
     @Column(nullable = false, length = 100)
     private String nome;
 
-    @Column(name = "duracao_minutos", nullable = false)
-    private Integer duracaoMinutos;
-
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal preco;
+    @Column(nullable = false, length = 60)
+    private String especialidade;
 }

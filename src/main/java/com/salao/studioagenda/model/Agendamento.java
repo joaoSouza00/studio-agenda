@@ -54,6 +54,9 @@ public class Agendamento {
     @Column(name = "data_hora_inicio", nullable = false)
     private LocalDateTime dataHoraInicio;
 
+    @Column(name = "data_hora_fim", nullable = false)
+    private LocalDateTime dataHoraFim;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private StatusAgendamento status = StatusAgendamento.AGENDADO;
@@ -64,8 +67,8 @@ public class Agendamento {
                 .sum();
     }
 
-    public LocalDateTime calcularDataHoraFim() {
-        return dataHoraInicio.plusMinutes(calcularDuracaoTotalMinutos());
+    public void recalcularDataHoraFim() {
+        this.dataHoraFim = dataHoraInicio.plusMinutes(calcularDuracaoTotalMinutos());
     }
 
     public BigDecimal calcularValorTotal() {

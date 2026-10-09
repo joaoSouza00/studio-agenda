@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="~{fragments/layout :: head(${clienteId == null} ? 'Novo cliente' : 'Editar cliente')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: nav}"></nav>
+<main>
+    <h1 th:text="${clienteId == null} ? 'Novo cliente' : 'Editar cliente'">Cliente</h1>
+    <form th:action="${clienteId == null} ? @{/clientes} : @{/clientes/{id}(id=${clienteId})}" th:object="${cliente}" method="post">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" th:field="*{nome}">
+        <div class="erro-campo" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+
+        <label for="telefone">Telefone</label>
+        <input type="text" id="telefone" th:field="*{telefone}">
+        <div class="erro-campo" th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}"></div>
+
+        <label for="email">E-mail</label>
+        <input type="email" id="email" th:field="*{email}">
+        <div class="erro-campo" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+
+        <button type="submit">Salvar</button>
+        <a class="botao botao-secundario" th:href="@{/clientes}">Cancelar</a>
+    </form>
+</main>
+</body>
+</html>

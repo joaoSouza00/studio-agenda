@@ -3,7 +3,9 @@ package com.salao.studioagenda.service;
 import com.salao.studioagenda.dto.ProfissionalRequest;
 import com.salao.studioagenda.dto.ProfissionalResponse;
 import com.salao.studioagenda.exception.RecursoNaoEncontradoException;
+import com.salao.studioagenda.exception.RegraNegocioException;
 import com.salao.studioagenda.model.Profissional;
+import com.salao.studioagenda.repository.AgendamentoRepository;
 import com.salao.studioagenda.repository.ProfissionalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.List;
 public class ProfissionalService {
 
     private final ProfissionalRepository profissionalRepository;
+    private final AgendamentoRepository agendamentoRepository;
 
     public List<ProfissionalResponse> listarTodos() {
         return profissionalRepository.findAll().stream()
@@ -44,7 +47,11 @@ public class ProfissionalService {
 
     @Transactional
     public void excluir(Long id) {
-        profissionalRepository.delete(buscarEntidade(id));
+        Profissional profissional = buscarEntidade(id);
+        if (agendamentoRepository.existsByProfissionalId(id)) {
+            throw new RegraNegocioException("Não é possível excluir o profissional " + profissional.getNome() + " porque ele possui agendamentos");
+        }
+        profissionalRepository.delete(profissional);
     }
 
     private Profissional buscarEntidade(Long id) {

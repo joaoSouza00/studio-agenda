@@ -15,6 +15,7 @@ import com.salao.studioagenda.repository.ClienteRepository;
 import com.salao.studioagenda.repository.ProfissionalRepository;
 import com.salao.studioagenda.repository.ServicoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +34,7 @@ public class AgendamentoService {
     private final ServicoRepository servicoRepository;
 
     public List<AgendamentoResponse> listarTodos() {
-        return agendamentoRepository.findAll().stream()
+        return agendamentoRepository.findAll(Sort.by("dataHoraInicio")).stream()
                 .map(AgendamentoResponse::from)
                 .toList();
     }

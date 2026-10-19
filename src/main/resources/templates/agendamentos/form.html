@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="~{fragments/layout :: head(${agendamentoId == null} ? 'Novo agendamento' : 'Editar agendamento')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: nav}"></nav>
+<main>
+    <h1 th:text="${agendamentoId == null} ? 'Novo agendamento' : 'Editar agendamento'">Agendamento</h1>
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
+    <form th:action="${agendamentoId == null} ? @{/agendamentos} : @{/agendamentos/{id}(id=${agendamentoId})}" th:object="${agendamento}" method="post">
+        <label for="clienteId">Cliente</label>
+        <select id="clienteId" th:field="*{clienteId}">
+            <option value="">Selecione o cliente</option>
+            <option th:each="cliente : ${clientes}" th:value="${cliente.id}" th:text="${cliente.nome}"></option>
+        </select>
+        <div class="erro-campo" th:if="${#fields.hasErrors('clienteId')}" th:errors="*{clienteId}"></div>
+
+        <label for="profissionalId">Profissional</label>
+        <select id="profissionalId" th:field="*{profissionalId}">
+            <option value="">Selecione o profissional</option>
+            <option th:each="profissional : ${profissionais}" th:value="${profissional.id}" th:text="${profissional.nome} + ' (' + ${profissional.especialidade} + ')'"></option>
+        </select>
+        <div class="erro-campo" th:if="${#fields.hasErrors('profissionalId')}" th:errors="*{profissionalId}"></div>
+
+        <label>Serviços</label>
+        <p th:if="${#lists.isEmpty(servicos)}">Nenhum serviço cadastrado. <a th:href="@{/servicos/novo}">Cadastre um serviço</a>.</p>
+        <div class="opcao" th:each="servico : ${servicos}">
+            <input type="checkbox" th:field="*{servicoIds}" th:value="${servico.id}">
+            <label class="opcao-texto" th:for="${#ids.prev('servicoIds')}"
+                   th:text="${servico.nome} + ' (' + ${servico.duracaoMinutos} + ' min, R$ ' + ${#numbers.formatDecimal(servico.preco, 1, 'POINT', 2, 'COMMA')} + ')'"></label>
+        </div>
+        <div class="erro-campo" th:if="${#fields.hasErrors('servicoIds')}" th:errors="*{servicoIds}"></div>
+
+        <label for="dataHoraInicio">Data e hora de início</label>
+        <input type="datetime-local" id="dataHoraInicio" th:field="*{dataHoraInicio}">
+        <div class="erro-campo" th:if="${#fields.hasErrors('dataHoraInicio')}" th:errors="*{dataHoraInicio}"></div>
+
+        <button type="submit">Salvar</button>
+        <a class="botao botao-secundario" th:href="@{/agendamentos}">Voltar</a>
+    </form>
+</main>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="~{fragments/layout :: head('Profissionais')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: nav}"></nav>
+<main>
+    <h1>Profissionais</h1>
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
+    <a class="botao" th:href="@{/profissionais/novo}">Novo profissional</a>
+    <p th:if="${#lists.isEmpty(profissionais)}">Nenhum profissional cadastrado.</p>
+    <table th:unless="${#lists.isEmpty(profissionais)}">
+        <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Especialidade</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="profissional : ${profissionais}">
+            <td th:text="${profissional.nome}"></td>
+            <td th:text="${profissional.especialidade}"></td>
+            <td class="acoes">
+                <a class="botao" th:href="@{/profissionais/{id}/editar(id=${profissional.id})}">Editar</a>
+                <form class="inline" th:action="@{/profissionais/{id}/excluir(id=${profissional.id})}" method="post">
+                    <button type="submit" class="botao-perigo">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

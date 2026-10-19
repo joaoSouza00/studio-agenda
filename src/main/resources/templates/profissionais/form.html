@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="~{fragments/layout :: head(${profissionalId == null} ? 'Novo profissional' : 'Editar profissional')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: nav}"></nav>
+<main>
+    <h1 th:text="${profissionalId == null} ? 'Novo profissional' : 'Editar profissional'">Profissional</h1>
+    <form th:action="${profissionalId == null} ? @{/profissionais} : @{/profissionais/{id}(id=${profissionalId})}" th:object="${profissional}" method="post">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" th:field="*{nome}">
+        <div class="erro-campo" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+
+        <label for="especialidade">Especialidade</label>
+        <input type="text" id="especialidade" th:field="*{especialidade}">
+        <div class="erro-campo" th:if="${#fields.hasErrors('especialidade')}" th:errors="*{especialidade}"></div>
+
+        <button type="submit">Salvar</button>
+        <a class="botao botao-secundario" th:href="@{/profissionais}">Cancelar</a>
+    </form>
+</main>
+</body>
+</html>

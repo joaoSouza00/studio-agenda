@@ -3,7 +3,9 @@ package com.salao.studioagenda.service;
 import com.salao.studioagenda.dto.ServicoRequest;
 import com.salao.studioagenda.dto.ServicoResponse;
 import com.salao.studioagenda.exception.RecursoNaoEncontradoException;
+import com.salao.studioagenda.exception.RegraNegocioException;
 import com.salao.studioagenda.model.Servico;
+import com.salao.studioagenda.repository.AgendamentoRepository;
 import com.salao.studioagenda.repository.ServicoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.List;
 public class ServicoService {
 
     private final ServicoRepository servicoRepository;
+    private final AgendamentoRepository agendamentoRepository;
 
     public List<ServicoResponse> listarTodos() {
         return servicoRepository.findAll().stream()
@@ -44,7 +47,11 @@ public class ServicoService {
 
     @Transactional
     public void excluir(Long id) {
-        servicoRepository.delete(buscarEntidade(id));
+        Servico servico = buscarEntidade(id);
+        if (agendamentoRepository.existsByServicosId(id)) {
+            throw new RegraNegocioException("Não é possível excluir o serviço " + servico.getNome() + " porque ele está vinculado a agendamentos");
+        }
+        servicoRepository.delete(servico);
     }
 
     private Servico buscarEntidade(Long id) {

@@ -30,4 +30,10 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
     List<Agendamento> findByClienteId(Long clienteId);
 
     List<Agendamento> findByProfissionalId(Long profissionalId);
+
+    boolean existsByClienteId(Long clienteId);
+
+    boolean existsByProfissionalId(Long profissionalId);
+
+    boolean existsByServicosId(Long servicoId);
 }

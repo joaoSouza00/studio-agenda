@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head th:replace="~{fragments/layout :: head('Agendamentos')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: nav('agendamentos')}"></nav>
+<main class="container py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+        <h1 class="h3 mb-0">Agendamentos</h1>
+        <a class="btn btn-primary" th:href="@{/agendamentos/novo}"><i class="bi bi-plus-lg me-1"></i>Novo agendamento</a>
+    </div>
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
+    <div class="card">
+        <div class="card-body text-center text-muted py-5" th:if="${#lists.isEmpty(agendamentos)}">
+            <i class="bi bi-calendar-x fs-1 d-block mb-2"></i>
+            Nenhum agendamento cadastrado.
+        </div>
+        <div class="table-responsive" th:unless="${#lists.isEmpty(agendamentos)}">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr>
+                    <th>Data e hora</th>
+                    <th>Cliente</th>
+                    <th>Profissional</th>
+                    <th>Serviços</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="agendamento : ${agendamentos}">
+                    <td class="text-nowrap">
+                        <div class="fw-semibold" th:text="${#temporals.format(agendamento.dataHoraInicio, 'dd/MM/yyyy HH:mm')}"></div>
+                        <div class="small text-muted" th:text="'até ' + ${#temporals.format(agendamento.dataHoraFim, 'HH:mm')} + ' (' + ${agendamento.duracaoTotalMinutos} + ' min)'"></div>
+                    </td>
+                    <td th:text="${agendamento.clienteNome}"></td>
+                    <td th:text="${agendamento.profissionalNome}"></td>
+                    <td th:text="${#strings.listJoin(agendamento.servicos.![nome], ', ')}"></td>
+                    <td class="text-nowrap" th:text="'R$ ' + ${#numbers.formatDecimal(agendamento.valorTotal, 1, 'POINT', 2, 'COMMA')}"></td>
+                    <td>
+                        <span class="badge rounded-pill"
+                              th:classappend="${agendamento.status.name() == 'AGENDADO'} ? 'text-bg-primary' : (${agendamento.status.name() == 'CONCLUIDO'} ? 'text-bg-success' : 'text-bg-secondary')"
+                              th:text="${agendamento.status}"></span>
+                    </td>
+                    <td class="text-end text-nowrap">
+                        <th:block th:if="${agendamento.status.name() == 'AGENDADO'}">
+                            <a class="btn btn-sm btn-outline-primary" th:href="@{/agendamentos/{id}/editar(id=${agendamento.id})}" title="Editar"><i class="bi bi-pencil"></i></a>
+                            <form class="d-inline" th:action="@{/agendamentos/{id}/concluir(id=${agendamento.id})}" method="post">
+                                <button type="submit" class="btn btn-sm btn-outline-success" title="Concluir"><i class="bi bi-check-lg"></i></button>
+                            </form>
+                            <form class="d-inline" th:action="@{/agendamentos/{id}/cancelar(id=${agendamento.id})}" method="post"
+                                  onsubmit="return confirm('Deseja cancelar este agendamento?')">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" title="Cancelar"><i class="bi bi-x-lg"></i></button>
+                            </form>
+                        </th:block>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

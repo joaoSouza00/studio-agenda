@@ -2,13 +2,52 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 <head th:replace="~{fragments/layout :: head('Início')}"></head>
 <body>
-<nav th:replace="~{fragments/layout :: nav}"></nav>
-<main>
-    <h1>StudioAgenda</h1>
-    <p>Sistema de agendamento para salões de beleza.</p>
-    <a class="botao" th:href="@{/clientes}">Clientes</a>
-    <a class="botao" th:href="@{/profissionais}">Profissionais</a>
-    <a class="botao" th:href="@{/servicos}">Serviços</a>
+<nav th:replace="~{fragments/layout :: nav('inicio')}"></nav>
+<main class="container py-4">
+    <div class="p-4 p-md-5 mb-4 rounded-3 bg-studio-claro">
+        <h1 class="display-6 fw-semibold text-studio">StudioAgenda</h1>
+        <p class="lead mb-4">Sistema de agendamento para salões de beleza.</p>
+        <a class="btn btn-primary btn-lg" th:href="@{/agendamentos/novo}"><i class="bi bi-plus-lg me-1"></i>Novo agendamento</a>
+    </div>
+    <div class="row g-3">
+        <div class="col-sm-6 col-lg-3">
+            <a class="card atalho h-100 text-decoration-none text-body" th:href="@{/agendamentos}">
+                <div class="card-body">
+                    <i class="bi bi-calendar-check fs-2 text-studio"></i>
+                    <h2 class="h5 mt-2">Agendamentos</h2>
+                    <p class="text-muted small mb-0">Marque, edite, conclua ou cancele horários.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <a class="card atalho h-100 text-decoration-none text-body" th:href="@{/clientes}">
+                <div class="card-body">
+                    <i class="bi bi-people fs-2 text-studio"></i>
+                    <h2 class="h5 mt-2">Clientes</h2>
+                    <p class="text-muted small mb-0">Cadastro de clientes e contatos.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <a class="card atalho h-100 text-decoration-none text-body" th:href="@{/profissionais}">
+                <div class="card-body">
+                    <i class="bi bi-person-badge fs-2 text-studio"></i>
+                    <h2 class="h5 mt-2">Profissionais</h2>
+                    <p class="text-muted small mb-0">Equipe do salão e especialidades.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <a class="card atalho h-100 text-decoration-none text-body" th:href="@{/servicos}">
+                <div class="card-body">
+                    <i class="bi bi-tags fs-2 text-studio"></i>
+                    <h2 class="h5 mt-2">Serviços</h2>
+                    <p class="text-muted small mb-0">Serviços oferecidos, duração e preço.</p>
+                </div>
+            </a>
+        </div>
+    </div>
 </main>
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
 </body>
 </html>

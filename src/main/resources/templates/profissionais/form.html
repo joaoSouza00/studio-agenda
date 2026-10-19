@@ -2,21 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
 <head th:replace="~{fragments/layout :: head(${profissionalId == null} ? 'Novo profissional' : 'Editar profissional')}"></head>
 <body>
-<nav th:replace="~{fragments/layout :: nav}"></nav>
-<main>
-    <h1 th:text="${profissionalId == null} ? 'Novo profissional' : 'Editar profissional'">Profissional</h1>
-    <form th:action="${profissionalId == null} ? @{/profissionais} : @{/profissionais/{id}(id=${profissionalId})}" th:object="${profissional}" method="post">
-        <label for="nome">Nome</label>
-        <input type="text" id="nome" th:field="*{nome}">
-        <div class="erro-campo" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
-
-        <label for="especialidade">Especialidade</label>
-        <input type="text" id="especialidade" th:field="*{especialidade}">
-        <div class="erro-campo" th:if="${#fields.hasErrors('especialidade')}" th:errors="*{especialidade}"></div>
-
-        <button type="submit">Salvar</button>
-        <a class="botao botao-secundario" th:href="@{/profissionais}">Cancelar</a>
-    </form>
+<nav th:replace="~{fragments/layout :: nav('profissionais')}"></nav>
+<main class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-9 col-lg-6">
+            <h1 class="h3 mb-3" th:text="${profissionalId == null} ? 'Novo profissional' : 'Editar profissional'">Profissional</h1>
+            <div class="card">
+                <div class="card-body p-4">
+                    <form th:action="${profissionalId == null} ? @{/profissionais} : @{/profissionais/{id}(id=${profissionalId})}" th:object="${profissional}" method="post" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label" for="nome">Nome</label>
+                            <input type="text" class="form-control" th:errorclass="is-invalid" id="nome" th:field="*{nome}">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label" for="especialidade">Especialidade</label>
+                            <input type="text" class="form-control" th:errorclass="is-invalid" id="especialidade" th:field="*{especialidade}" placeholder="Ex.: Cabeleireira, Manicure, Barbeiro">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('especialidade')}" th:errors="*{especialidade}"></div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <a class="btn btn-outline-secondary" th:href="@{/profissionais}">Cancelar</a>
+                            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i>Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
+<footer th:replace="~{fragments/layout :: rodape}"></footer>
 </body>
 </html>
